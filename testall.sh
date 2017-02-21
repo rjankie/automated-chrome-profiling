@@ -1,8 +1,21 @@
 #!/bin/bash
 
 ## start in the directory containing automated-chrome-profiling  (see https://github.com/paulirish/automated-chrome-profiling)
+## usage : ./testall.sh <nr_of_iterations>
+## A directory will be created with the start-time of the script 
+## In that directory the tracefiles will be created. For each iteration the stats will be collected.
+## the output format of the directory is:
+## profile-yyyymmdd-HHMMss   (e.g. profile-20170216-110609)
+## The trace files will be like: 
+## profile-20170221-144433.1.devtools.trace  (first iteration) (raw data) (can be opened in Chrome DevTools)
+## profile-20170221-144433.1.devtools.trace.summary.json  (first iteration) (summary info)
 
 
+if [ -z "$1" ]
+  then
+    echo "No argument supplied. Provide the nr_of_iterations e.g. 10, 100,etc."
+    exit;
+fi
 directory=`date +%Y%m%d-%H%M%S`
 
 sleep 3
