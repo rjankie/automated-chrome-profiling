@@ -1,17 +1,24 @@
-const filename = 'demo/mdn-fling.json'
+const filename = 'profile-'+process.argv[2]+'/profile-'+process.argv[2]+'.'+process.argv[3]+'.devtools.trace'
+var events = require('fs').readFileSync(filename, 'utf8')
 
-var fs = require('fs')
-var traceToTimelineModel = require('devtools-timeline-model')
+var DevtoolsTimelineModel = require('devtools-timeline-model');
+// events can be either a string of the trace data or the JSON.parse'd equivalent
+var model = new DevtoolsTimelineModel(events)
 
-var events = fs.readFileSync(filename, 'utf8')
-var model = traceToTimelineModel(events)
-
-console.log('Timeline model events:', model.timelineModel.mainThreadEvents().length)
-console.log('IR model interactions', model.irModel.interactionRecords().length)
-console.log('Frame model frames', model.frameModel.frames().length)
-
-
-// console.log('Timeline model:', model.timelineModel)
-// console.log('IR model', model.irModel)
-// console.log('Frame model', model.frameModel)
-
+// tracing model
+model.tracingModel()
+// timeline model, all events
+model.timelineModel()
+// interaction model, incl scroll, click, animations
+model.interactionModel()
+// frame model, incl frame durations
+model.frameModel()
+// filmstrip model, incl screenshots
+model.filmStripModel()
+// topdown tree
+model.topDown()
+// bottom up tree
+model.bottomUp()
+// bottom up tree, grouped by URL
+console.log('Top down tree total time:\n', model.topDown.totalTime);
+console.log("Finished processing file " + filename);
